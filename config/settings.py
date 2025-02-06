@@ -207,8 +207,12 @@ LOGGING = {
 
 # django-csp 3.8
 
-CSP_DEFAULT_SRC               = ["https://ka-f.fontawesome.com/","'self'",]
-CSP_FONT_SRC                  = ["https://kit.fontawesome.com/","https://fonts.gstatic.com/","https://fonts.googleapis.com/","'self'",]
+CSP_DEFAULT_SRC               = ["https://ka-f.fontawesome.com/",
+                                 "'unsafe-inline'",
+                                 "'self'",]
+CSP_FONT_SRC                  = ["https://kit.fontawesome.com/",
+                                 "https://fonts.gstatic.com/","https://fonts.googleapis.com/",
+                                 "'self'",]
 CSP_FRAME_ANCESTORS           = ["'self'"]
 # CSP_REQUIRE_TRUSTED_TYPES_FOR = ["'script'",]   # not widely supported yet, but suggested by https://csp-evaluator.withgoogle.com/
 CSP_SCRIPT_SRC                = ["https://code.jquery.com/",
@@ -216,7 +220,7 @@ CSP_SCRIPT_SRC                = ["https://code.jquery.com/",
                                  "'unsafe-inline'",
                                  "'self'",]
 CSP_STYLE_SRC                 = ["https://kit.fontawesome.com/","https://fonts.gstatic.com/","https://fonts.googleapis.com/","'self'",]
-CSP_UPGRADE_INSECURE_REQUESTS = True
+CSP_UPGRADE_INSECURE_REQUESTS = False
 
 # CSP-4.0 from csp.constants import NONE, SELF
 # 
