@@ -12,7 +12,13 @@ Note: when running commands in docker, your .env needs to have the PGSQL host as
 2. Navigate to the project root.
 3. Populate the values of `.env.sample` to match your desired configuration, and remove .sample from the filename. 
 4. Run `docker-compose up --build -d`.
-5. Run the command `py schema_populator.py` once you have verified that the db is running to build out the full database.
+5. Run `pip install -r requirements\requirements.txt`
+6. Run `python manage.py makemigrations`
+7. Run `python manage.py migrate`
+8. Run the command `py schema_populator.py` once you have verified that the db is running to build out the full database.
+
+If you do not follow steps 5 through 8 in this order, you will encounter issues with not all the tables being available in
+the database. This will require manually dropping the tables, and making a new migration so that all data models are correctly tracked.
 
 With that, your application should be running. You may access it at http://localhost:8000. As long as docker continues 
 to run, this service will run in the background. When docker is restarted, the service too should be restarted automatically.
