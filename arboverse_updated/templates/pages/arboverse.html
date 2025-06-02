@@ -29,16 +29,55 @@
     z-index: 1000;
     width: calc(100% - 40px); /* Match input width */
     display: none; /* Hidden by default */
-}
+  }
 
-.suggestions li {
+  .suggestions li {
+      padding: 8px 12px;
+      cursor: pointer;
+  }
+
+  .suggestions li:hover {
+      background-color: #f0f0f0;
+  }
+
+  .autocomplete-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: inherit;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .autocomplete-item {
     padding: 8px 12px;
     cursor: pointer;
-}
+    border-bottom: 1px solid #eee;
+  }
 
-.suggestions li:hover {
+  .autocomplete-item:last-child {
+    border-bottom: none;
+  }
+
+  .autocomplete-item:hover {
     background-color: #f0f0f0;
-}
+  }
+
+  .search {
+    position: relative;
+  }
+
 </style>
 </div>
 <main>
@@ -53,7 +92,7 @@
           <div class="search" id="autocomplete-container">
             <input class="search-virus" type="texts" placeholder="Search arbovirus..." id="arbovirus-search">
             <button id="arbovirus-submit" class="searchbutton" type="submit" onclick="searchVirusDB('arbovirus-search')"><i class="fa fa-search"></i></button>
-            <div id="arbo-autocomplete" class="autocomplete-box"></div>
+            <div id="arbo-autocomplete" class="autocomplete-box hidden"></div>
           </div>
           <div class="tabs">
             <div class="tab">
@@ -298,7 +337,7 @@
           <div class="search" id="autocomplete-container">
             <input class="search-vector" type="text" placeholder="Search vector..." id="vector-search">
             <button id="vector-submit" class="searchbutton-vector" type="submit" onclick="searchVectorDB('vector-search')"><i class="fa fa-search"></i></button>
-            <div id="vector-autocomplete" class="autocomplete-box"></div>
+            <div id="vector-autocomplete" class="autocomplete-box hidden"></div>
           </div>
           <div class="tabs">
             <div class="tab">
@@ -5826,6 +5865,13 @@
     // Clear previous suggestions
     autocompleteBox.innerHTML = '';
 
+    if (suggestions.length === 0) {
+      autocompleteBox.classList.add('hidden'); // Hide if no suggestions
+      return;
+    }
+
+    autocompleteBox.classList.remove('hidden'); // Show if there are suggestions
+
     // Show new suggestions
     suggestions.forEach(suggestion => {
       const div = document.createElement('div');
@@ -5836,18 +5882,20 @@
       div.onclick = function() {
         inputElement.value = suggestion;
         autocompleteBox.innerHTML = ''; // Clear suggestions after selection
+        autocompleteBox.classList.add('hidden'); // Hide suggestions
       };
 
       autocompleteBox.appendChild(div);
     });
   }
 
+
   // Filter suggestions based on input
   function filterSuggestions(input, items) {
     const searchTerm = input.toLowerCase();
     return items.filter(item =>
       item.toLowerCase().includes(searchTerm)
-    );
+    ).slice(0,3);
   }
 
   // Event listeners for arbovirus search
@@ -5864,9 +5912,11 @@
 
   // Close suggestions when clicking outside
   document.addEventListener('click', function(e) {
-    if (!e.target.closest('.autocomplete-container')) {
+    if (!e.target.closest('.search')) {
       arboAutocomplete.innerHTML = '';
+      arboAutocomplete.classList.add('hidden');
       vectorAutocomplete.innerHTML = '';
+      vectorAutocomplete.classList.add('hidden');
     }
   });
 
