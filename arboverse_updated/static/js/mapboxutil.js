@@ -113,34 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'none'
         );
     }
-    //map visibility checked
-    function update_map(cb) {
-        var clickedLayers = cb.id
-        clickedLayersList = clickedLayers.split(',')
-        //console.log(clickedLayersList)
-        if (cb.checked) {
-            for (let i = 0; i < clickedLayersList.length; i++) {
-                clickedLayer = clickedLayersList[i];
-                map.setLayoutProperty(
-                    clickedLayer,
-                    'visibility',
-                    'visible'
-                );
-            }
-
-        } else {
-            for (let i = 0; i < clickedLayersList.length; i++) {
-                clickedLayer = clickedLayersList[i];
-                map.setLayoutProperty(
-                    clickedLayer,
-                    'visibility',
-                    'none'
-                );
-            }
-        }
-
-        //console.log(cb.checked);
-    }
 
     var activeLayer = {}
     function update_map_time(cb, model, year, prefix) {
@@ -2534,22 +2506,11 @@ document.addEventListener('DOMContentLoaded', () => {
         function showSuggestions(inputElement, data, autocompleteBox) {
           const normalizedValue = normalize(inputElement.value);
 
-          // Filter and limit suggestions
           const matches = data
             .filter(v => normalize(v).includes(normalizedValue))
-            .slice(0, 3); // Limit to top 3
+            //.slice(0, 3); // Limit to top 3
 
-          // Clear previous suggestions
           autocompleteBox.innerHTML = '';
-
-          if (matches.length === 0) {
-            autocompleteBox.classList.add('hidden');
-            return;
-          }
-
-          autocompleteBox.classList.remove('hidden');
-
-          console.log(matches);
 
           matches.forEach(match => {
             const div = document.createElement('div');
@@ -2560,13 +2521,12 @@ document.addEventListener('DOMContentLoaded', () => {
               inputElement.value = match;
               autocompleteBox.innerHTML = '';
               autocompleteBox.classList.add('hidden');
-              applyFilter(); // Reuse your original filtering logic
+              applyFilter();
             };
 
             autocompleteBox.appendChild(div);
           });
         }
-
 
         searchInput.addEventListener('input', function (e) {
             const value = e.target.value;
