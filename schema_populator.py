@@ -12,10 +12,10 @@ debug_mode = True
 # Database connection
 
 if debug_mode:
-   print(f"postgresql+psycopg2://{os.getenv('PGSQL_USER')}:{os.getenv('PGSQL_PASS')}@{os.getenv('PGSQL_HOST')}:{int(os.getenv('PGSQL_PORT'))}/{os.getenv('PGSQL_DB')}")
+   print(f"postgresql+psycopg2://{os.getenv('PGSQL_USER')}:{os.getenv('PGSQL_PASS')}@{os.getenv('SCRIPT_HOST')}:{int(os.getenv('PGSQL_PORT'))}/{os.getenv('PGSQL_DB')}")
 
 engine = create_engine(
-    f"postgresql+psycopg2://{os.getenv('PGSQL_USER')}:{os.getenv('PGSQL_PASS')}@{os.getenv('PGSQL_HOST')}:{int(os.getenv('PGSQL_PORT'))}/{os.getenv('PGSQL_DB')}")
+    f"postgresql+psycopg2://{os.getenv('PGSQL_USER')}:{os.getenv('PGSQL_PASS')}@{os.getenv('SCRIPT_HOST')}:{int(os.getenv('PGSQL_PORT'))}/{os.getenv('PGSQL_DB')}")
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
