@@ -6045,16 +6045,19 @@
           }
           return response.json();
       })
-      .then(data => {
-        data = data[0]
+      .then(full_data => {
+
+        const data = full_data['virus'][0];
+        let virusvector = full_data['virus_vector'];
         console.log(data);
+        console.log(virusvector);
 
         // Taxonomy and Genomics
         document.getElementById('virus_name').innerHTML = data.name;
         document.getElementById('virus_abbrev').innerHTML = data.abbreviation;
         document.getElementById('virus_taxonomy').innerHTML = data.family.name + " | " + data.genus.name;
         document.getElementById('virus_firstIso').innerHTML = data.collection_date;
-        document.getElementById('virus_strain').innerHTML = `<a href=${data.reference_strain} target='_blank'>${data.reference_strain}</a>`;
+        document.getElementById('virus_strain').innerHTML = data.reference_strain;
         document.getElementById('virus_reference').innerHTML = data.genome_type;
         document.getElementById('virus_size').innerHTML = data.genome_length_nt;
         document.getElementById('virus_genome').innerHTML = data.genome_type;
@@ -6070,7 +6073,22 @@
           }
         }
         document.getElementById('virus_vector').innerHTML = data.borning.borne_type; // these two need to reference virusvector
-        document.getElementById('virus_vector_binominal').innerHTML = vectors.join(" | ");
+        if (virusvector.length == 0) {
+          document.getElementById('virus_vector_binominal').innerHTML = "unknown";
+        } else {
+          // Probably will need some further processing
+          let vv_names = [];
+          for (let i=0; i<virusvector.length; i++) {
+            // If the vector is the main vector, put it at the front of the list
+            if (virusvector[i].main_vector) {
+              vv_names.unshift(virusvector[i].vector.name);
+            } else {
+              vv_names.push(virusvector[i].vector.name);
+            }
+          }
+          console.log(vv_names);
+          document.getElementById('virus_vector_binominal').innerHTML = vv_names.join(" | ");
+        }
         document.getElementById('virus_host').innerHTML = data.host_amplifier;
 
         // Diseases
