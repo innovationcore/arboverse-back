@@ -2137,7 +2137,7 @@ var popup = new mapboxgl.Popup({
 var filterEl = document.getElementById('vector_dist');
 var listingEl = document.getElementById('feature-listing');
 
-//Render List in specific location Ok
+/*//Render List in specific location Ok
 function renderListings(features) {
     var empty = document.createElement('p');
     //clear any existing listings
@@ -2164,7 +2164,50 @@ function renderListings(features) {
         // remove features filter
         map.setFilter('arboverse.vector_distribution', ['has', 'species']);
     }
+}*/
+
+function renderListings(features) {
+    var empty = document.createElement('p');
+    // Clear any existing listings
+    listingEl.innerHTML = '';
+    if (features.length) {
+        features.forEach(function (feature) {
+            var item = document.createElement('a');
+            item.textContent = feature.properties.species;
+
+            // Hover shows popup
+            item.addEventListener('mouseover', function () {
+                popup
+                    .setLngLat(feature.geometry.coordinates)
+                    .setText(feature.properties.species)
+                    .addTo(map);
+            });
+
+            // Click centers map on feature
+            item.addEventListener('click', function () {
+                map.flyTo({
+                    center: feature.geometry.coordinates,
+                    zoom: 3, // adjust zoom level as needed
+                    speed: 1.2, // optional
+                    curve: 1,   // optional
+                    essential: true
+                });
+            });
+
+            listingEl.appendChild(item);
+        });
+    } else if (features.length === 0 && filterEl.value !== '') {
+        empty.textContent = 'No results found';
+        listingEl.appendChild(empty);
+    } else {
+        empty.textContent = 'Zoom desired area to populate results';
+        listingEl.appendChild(empty);
+        // remove features filter
+        map.setFilter('arboverse.vector_distribution', ['has', 'species']);
+    }
 }
+
+
 function normalize(string) {
     return string.trim().toLowerCase();
 }
@@ -2186,6 +2229,7 @@ function getUniqueFeatures(features, comparatorProperty) {
     }
     return uniqueFeatures;
 }
+
 //VECTOR DISTRIBUTION
 map.on('load', function () {
     var vectorFilter = ["==", ["string", ["get", "type"]], "mosquito"];
