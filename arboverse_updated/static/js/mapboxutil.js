@@ -2140,6 +2140,42 @@ var popup = new mapboxgl.Popup({
 var filterEl = document.getElementById('vector_dist');
 var listingEl = document.getElementById('feature-listing');
 
+    /**
+     * A helper function to combine filters and apply them to the map.
+     * This ensures that the vector type dropdown and the text search
+     * can work together.
+     */
+    function applyFilters() {
+        const vectorType = document.getElementById("vectortype").value;
+        const searchText = normalize(filterEl.value);
+
+        // 1. Create the base filter from the dropdown selection.
+        const typeFilter = ["==", ["get", "type"], vectorType];
+
+        // 2. Create the filter from the text search input.
+        // We filter the `allVectors` array first in JavaScript, which is very fast.
+        const filteredByText = allVectors.filter(function (feature) {
+            const species = normalize(feature.properties.species);
+            return species.indexOf(searchText) > -1;
+        });
+
+        // Update the sidebar list with the text-filtered results.
+        renderListings(filteredByText);
+
+        // 3. Create a Mapbox filter expression from the text-filtered results.
+        const speciesFilter = [
+            'match',
+            ['get', 'species'],
+            filteredByText.map(feature => feature.properties.species),
+            true, // If a feature's species is in the list, show it.
+            false // Otherwise, hide it.
+        ];
+
+        // 4. Combine the filters and apply them to the map layer.
+        // The layer will only show features that match BOTH the type and the species search.
+        map.setFilter('arboverse.vector_distribution', ["all", typeFilter, speciesFilter]);
+    }
+
 //Render List in specific location Ok
 function renderListings(features) {
     var empty = document.createElement('p');
@@ -2165,6 +2201,8 @@ function renderListings(features) {
                     curve: 1,   // optional
                     essential: true
                 });
+                document.getElementById('vector_dist').value = feature.properties.species;
+                applyFilters();
             });
             listingEl.appendChild(item);
         });
@@ -2213,42 +2251,6 @@ map.on('load', function () {
         'type': 'vector',
         'url': 'mapbox://arboverse.vector_distribution'
     });
-
-    /**
-     * A helper function to combine filters and apply them to the map.
-     * This ensures that the vector type dropdown and the text search
-     * can work together.
-     */
-    function applyFilters() {
-        const vectorType = document.getElementById("vectortype").value;
-        const searchText = normalize(filterEl.value);
-
-        // 1. Create the base filter from the dropdown selection.
-        const typeFilter = ["==", ["get", "type"], vectorType];
-
-        // 2. Create the filter from the text search input.
-        // We filter the `allVectors` array first in JavaScript, which is very fast.
-        const filteredByText = allVectors.filter(function (feature) {
-            const species = normalize(feature.properties.species);
-            return species.indexOf(searchText) > -1;
-        });
-
-        // Update the sidebar list with the text-filtered results.
-        renderListings(filteredByText);
-
-        // 3. Create a Mapbox filter expression from the text-filtered results.
-        const speciesFilter = [
-            'match',
-            ['get', 'species'],
-            filteredByText.map(feature => feature.properties.species),
-            true, // If a feature's species is in the list, show it.
-            false // Otherwise, hide it.
-        ];
-
-        // 4. Combine the filters and apply them to the map layer.
-        // The layer will only show features that match BOTH the type and the species search.
-        map.setFilter('arboverse.vector_distribution', ["all", typeFilter, speciesFilter]);
-    }
 
     /**
      * This function runs when the source data is loaded.
