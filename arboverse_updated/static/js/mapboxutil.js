@@ -2,16 +2,8 @@
 // https://account.mapbox.com
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXJib3ZlcnNlIiwiYSI6ImNrbXA2ODdnMzJibDAycXF1ODc2dmJtNngifQ.qHL3R2dqFpECCzUckaSl3w';
 
-
 console.log('mapbox code loaded')
-console.log('getting ready to grab document elements by IDs');
-const searchInput = document.getElementById('species-distribution-search');
-const suggestionsEl = document.getElementById('species-distribution-autocomplete');
-const searchBtn = document.getElementById('search-distribution-btn');
 
-console.log(suggestionsEl);
-
-console.log('suggestions EL should have been here by now.')
 // initiate a new map by passing an object describing a config
 // for more info see: https://docs.mapbox.com/mapbox-gl-js/api/map/
 var map = new mapboxgl.Map({
@@ -112,6 +104,34 @@ const addRasterTileLayerToMap = (mapVar, title, url, type, source_layer, minzoom
         'visibility',
         'none'
     );
+}
+//map visibility checked
+function update_map(cb) {
+    var clickedLayers = cb.id
+    clickedLayersList = clickedLayers.split(',')
+    //console.log(clickedLayersList)
+    if (cb.checked) {
+        for (let i = 0; i < clickedLayersList.length; i++) {
+            clickedLayer = clickedLayersList[i];
+            map.setLayoutProperty(
+                clickedLayer,
+                'visibility',
+                'visible'
+            );
+        }
+
+    } else {
+        for (let i = 0; i < clickedLayersList.length; i++) {
+            clickedLayer = clickedLayersList[i];
+            map.setLayoutProperty(
+                clickedLayer,
+                'visibility',
+                'none'
+            );
+        }
+    }
+
+    //console.log(cb.checked);
 }
 
 var activeLayer = {}
@@ -323,26 +343,19 @@ map.on('load', async () => {
     addRasterTileLayerToMap(map, 'arboverse.dryspells_ch_rcp85_2055_2085', 'mapbox://arboverse.dryspells_ch_rcp85_2055_2085', 'raster', 'mapbox://arboverse.dryspells_ch_rcp85_2055_2085', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.dryspells_ch_rcp85_2065_2095', 'mapbox://arboverse.dryspells_ch_rcp85_2065_2095', 'raster', 'mapbox://arboverse.dryspells_ch_rcp85_2065_2095', 0, 19);
     //Koppengeiger
-    addTileLayerToMap(map, 'arboverse.presentfull', 'mapbox://arboverse.presentfull', 'fill', {
-        'fill-color': ["case", ["==", ["get", "classes"], 0], "hsla(0, 0%, 0%, 0)", ["match", ["get", "classes"], [1], true, false], "#8c0273", ["match", ["get", "classes"], [2], true, false], "#8f1966", ["match", ["get", "classes"], [3], true, false], "#91285a", ["match", ["get", "classes"], [4], true, false], "#922e54", ["match", ["get", "classes"], [5], true, false], "#943c4a", ["match", ["get", "classes"], [6], true, false], "#964941", ["match", ["get", "classes"], [7], true, false], "#974f3c", ["match", ["get", "classes"], [8], true, false], "#996330", ["match", ["get", "classes"], [9], true, false], "#9a692b", ["match", ["get", "classes"], [10], true, false], "#9b7127", ["match", ["get", "classes"], [11], true, false], "#9c7923", ["match", ["get", "classes"], [12], true, false], "#9c801f", ["match", ["get", "classes"], [13], true, false], "#9d891c", ["match", ["get", "classes"], [14], true, false], "#9c911c", ["match", ["get", "classes"], [15], true, false], "#9b9a1d", ["match", ["get", "classes"], [16], true, false], "#99a323", ["match", ["get", "classes"], [17], true, false], "#91b437", ["match", ["get", "classes"], [18], true, false], "#8cba44", ["match", ["get", "classes"], [19], true, false], "#86c051", ["match", ["get", "classes"], [20], true, false], "#80c55f", ["match", ["get", "classes"], [21], true, false], "#79ca6d", ["match", ["get", "classes"], [22], true, false], "#73ce7b", ["match", ["get", "classes"], [23], true, false], "#6dd389", ["match", ["get", "classes"], [24], true, false], "#68d797", ["match", ["get", "classes"], [26], true, false], "#60e0b5", ["match", ["get", "classes"], [27], true, false], "#60e4c4", ["match", ["get", "classes"], [28], true, false], "#65e8d2", ["match", ["get", "classes"], [29], true, false], "#8ff0f1", ["match", ["get", "classes"], [30], true, false], "#b3f2fd", ["match", ["get", "classes"], [25], true, false], "#62dca7", "#000000"]
-    }, 'kopeen_fullpresent');
-    addTileLayerToMap(map, 'arboverse.koppenfuture', 'mapbox://arboverse.koppenfuture', 'fill', {
-        'fill-color': ["case", ["==", ["get", "classes"], 0], "hsla(0, 0%, 0%, 0)", ["match", ["get", "classes"], [1], true, false], "#8c0273", ["match", ["get", "classes"], [2], true, false], "#8f1966", ["match", ["get", "classes"], [3], true, false], "#91285a", ["match", ["get", "classes"], [4], true, false], "#922e54", ["match", ["get", "classes"], [5], true, false], "#943c4a", ["match", ["get", "classes"], [6], true, false], "#964941", ["match", ["get", "classes"], [7], true, false], "#974f3c", ["match", ["get", "classes"], [8], true, false], "#996330", ["match", ["get", "classes"], [9], true, false], "#9a692b", ["match", ["get", "classes"], [10], true, false], "#9b7127", ["match", ["get", "classes"], [11], true, false], "#9c7923", ["match", ["get", "classes"], [12], true, false], "#9c801f", ["match", ["get", "classes"], [13], true, false], "#9d891c", ["match", ["get", "classes"], [14], true, false], "#9c911c", ["match", ["get", "classes"], [15], true, false], "#9b9a1d", ["match", ["get", "classes"], [16], true, false], "#99a323", ["match", ["get", "classes"], [17], true, false], "#91b437", ["match", ["get", "classes"], [18], true, false], "#8cba44", ["match", ["get", "classes"], [19], true, false], "#86c051", ["match", ["get", "classes"], [20], true, false], "#80c55f", ["match", ["get", "classes"], [21], true, false], "#79ca6d", ["match", ["get", "classes"], [22], true, false], "#73ce7b", ["match", ["get", "classes"], [23], true, false], "#6dd389", ["match", ["get", "classes"], [24], true, false], "#68d797", ["match", ["get", "classes"], [26], true, false], "#60e0b5", ["match", ["get", "classes"], [27], true, false], "#60e4c4", ["match", ["get", "classes"], [28], true, false], "#65e8d2", ["match", ["get", "classes"], [29], true, false], "#8ff0f1", ["match", ["get", "classes"], [30], true, false], "#b3f2fd", ["match", ["get", "classes"], [25], true, false], "#62dca7", "#000000"]
-    }, 'kopeen_future');
+    addTileLayerToMap(map, 'arboverse.presentfull', 'mapbox://arboverse.presentfull', 'fill', { 'fill-color': ["case", ["==", ["get", "classes"], 0], "hsla(0, 0%, 0%, 0)", ["match", ["get", "classes"], [1], true, false], "#8c0273", ["match", ["get", "classes"], [2], true, false], "#8f1966", ["match", ["get", "classes"], [3], true, false], "#91285a", ["match", ["get", "classes"], [4], true, false], "#922e54", ["match", ["get", "classes"], [5], true, false], "#943c4a", ["match", ["get", "classes"], [6], true, false], "#964941", ["match", ["get", "classes"], [7], true, false], "#974f3c", ["match", ["get", "classes"], [8], true, false], "#996330", ["match", ["get", "classes"], [9], true, false], "#9a692b", ["match", ["get", "classes"], [10], true, false], "#9b7127", ["match", ["get", "classes"], [11], true, false], "#9c7923", ["match", ["get", "classes"], [12], true, false], "#9c801f", ["match", ["get", "classes"], [13], true, false], "#9d891c", ["match", ["get", "classes"], [14], true, false], "#9c911c", ["match", ["get", "classes"], [15], true, false], "#9b9a1d", ["match", ["get", "classes"], [16], true, false], "#99a323", ["match", ["get", "classes"], [17], true, false], "#91b437", ["match", ["get", "classes"], [18], true, false], "#8cba44", ["match", ["get", "classes"], [19], true, false], "#86c051", ["match", ["get", "classes"], [20], true, false], "#80c55f", ["match", ["get", "classes"], [21], true, false], "#79ca6d", ["match", ["get", "classes"], [22], true, false], "#73ce7b", ["match", ["get", "classes"], [23], true, false], "#6dd389", ["match", ["get", "classes"], [24], true, false], "#68d797", ["match", ["get", "classes"], [26], true, false], "#60e0b5", ["match", ["get", "classes"], [27], true, false], "#60e4c4", ["match", ["get", "classes"], [28], true, false], "#65e8d2", ["match", ["get", "classes"], [29], true, false], "#8ff0f1", ["match", ["get", "classes"], [30], true, false], "#b3f2fd", ["match", ["get", "classes"], [25], true, false], "#62dca7", "#000000"] }, 'kopeen_fullpresent');
+    addTileLayerToMap(map, 'arboverse.koppenfuture', 'mapbox://arboverse.koppenfuture', 'fill', { 'fill-color': ["case", ["==", ["get", "classes"], 0], "hsla(0, 0%, 0%, 0)", ["match", ["get", "classes"], [1], true, false], "#8c0273", ["match", ["get", "classes"], [2], true, false], "#8f1966", ["match", ["get", "classes"], [3], true, false], "#91285a", ["match", ["get", "classes"], [4], true, false], "#922e54", ["match", ["get", "classes"], [5], true, false], "#943c4a", ["match", ["get", "classes"], [6], true, false], "#964941", ["match", ["get", "classes"], [7], true, false], "#974f3c", ["match", ["get", "classes"], [8], true, false], "#996330", ["match", ["get", "classes"], [9], true, false], "#9a692b", ["match", ["get", "classes"], [10], true, false], "#9b7127", ["match", ["get", "classes"], [11], true, false], "#9c7923", ["match", ["get", "classes"], [12], true, false], "#9c801f", ["match", ["get", "classes"], [13], true, false], "#9d891c", ["match", ["get", "classes"], [14], true, false], "#9c911c", ["match", ["get", "classes"], [15], true, false], "#9b9a1d", ["match", ["get", "classes"], [16], true, false], "#99a323", ["match", ["get", "classes"], [17], true, false], "#91b437", ["match", ["get", "classes"], [18], true, false], "#8cba44", ["match", ["get", "classes"], [19], true, false], "#86c051", ["match", ["get", "classes"], [20], true, false], "#80c55f", ["match", ["get", "classes"], [21], true, false], "#79ca6d", ["match", ["get", "classes"], [22], true, false], "#73ce7b", ["match", ["get", "classes"], [23], true, false], "#6dd389", ["match", ["get", "classes"], [24], true, false], "#68d797", ["match", ["get", "classes"], [26], true, false], "#60e0b5", ["match", ["get", "classes"], [27], true, false], "#60e4c4", ["match", ["get", "classes"], [28], true, false], "#65e8d2", ["match", ["get", "classes"], [29], true, false], "#8ff0f1", ["match", ["get", "classes"], [30], true, false], "#b3f2fd", ["match", ["get", "classes"], [25], true, false], "#62dca7", "#000000"] }, 'kopeen_future');
     //land cover
     addRasterTileLayerToMap(map, 'arboverse.8xtrhkxq', 'mapbox://arboverse.8xtrhkxq', 'raster', 'mapbox://arboverse.8xtrhkxq', 0, 19);
     // biomes
-    addTileLayerToMap(map, 'arboverse.biomes', 'mapbox://arboverse.biomes', 'fill', {'fill-color': ["match", ["get", "BIOME_NUM"], [1], "#011959", [2], "#0d335e", [3], "#124761", [4], "#1a5762", [5], "#2c665d", [6], "#457051", [7], "#627940", [8], "#828231", [9], "#a58b2c", [10], "#c8913b", [11], "#e79858", [12], "#f9a381", [13], "#fdb1aa", [14], "#fcbed1", "#000000"]}, 'biomes');
+    addTileLayerToMap(map, 'arboverse.biomes', 'mapbox://arboverse.biomes', 'fill', { 'fill-color': ["match", ["get", "BIOME_NUM"], [1], "#011959", [2], "#0d335e", [3], "#124761", [4], "#1a5762", [5], "#2c665d", [6], "#457051", [7], "#627940", [8], "#828231", [9], "#a58b2c", [10], "#c8913b", [11], "#e79858", [12], "#f9a381", [13], "#fdb1aa", [14], "#fcbed1", "#000000"] }, 'biomes');
     // biomes recovery index
-    addTileLayerToMap(map, 'arboverse.biomesindex', 'mapbox://arboverse.biomes', 'fill', {'fill-color': ["match", ["get", "NNH"], [4], "#88c369", [3], "#408a80", [2], "#1a608f", [1], "#031327", "#000000"]}, 'biomes');
+    addTileLayerToMap(map, 'arboverse.biomesindex', 'mapbox://arboverse.biomes', 'fill', { 'fill-color': ["match", ["get", "NNH"], [4], "#88c369", [3], "#408a80", [2], "#1a608f", [1], "#031327", "#000000"] }, 'biomes');
     // drought vulnerabity
-    addTileLayerToMap(map, 'arboverse.vulnerability', 'mapbox://arboverse.vulnerability', 'fill', {'fill-color': ["match", ["get", "GW_vulnera"], ["low vulnerability to floods and droughts"], "#ffcf67", ["moderate vulnerability to floods and low vulnerability to droughts"], "#e7a95a", ["low vulnerability to floods and moderate vulnerability to droughts"], "#cf874f", ["moderate vulnerability to floods and droughts"], "#b76945", ["high vulnerability to floods and moderate vulnerability to droughts"], "#9d4e3d", ["moderate vulnerability to floods and high vulnerability to droughts"], "#7e3739", ["high vulnerability to floods and droughts"], "#61293f", "#000000"]}, 'vulnerability');
-    addTileLayerToMap(map, 'arboverse.rivers', 'mapbox://arboverse.rivers', 'line', {
-        'line-color': "#81e7ff",
-        'line-width': ["interpolate", ["linear"], ["zoom"], 0, 1, 22, 2]
-    }, 'rivers');
-    addTileLayerToMap(map, 'arboverse.icesheets', 'mapbox://arboverse.icesheets', 'fill', {'fill-color': "#505f9e"}, 'icesheets');
-    addTileLayerToMap(map, 'arboverse.waterbodies', 'mapbox://arboverse.waterbodies', 'fill', {'fill-color': "#669ed2"}, 'waterbodies');
+    addTileLayerToMap(map, 'arboverse.vulnerability', 'mapbox://arboverse.vulnerability', 'fill', { 'fill-color': ["match", ["get", "GW_vulnera"], ["low vulnerability to floods and droughts"], "#ffcf67", ["moderate vulnerability to floods and low vulnerability to droughts"], "#e7a95a", ["low vulnerability to floods and moderate vulnerability to droughts"], "#cf874f", ["moderate vulnerability to floods and droughts"], "#b76945", ["high vulnerability to floods and moderate vulnerability to droughts"], "#9d4e3d", ["moderate vulnerability to floods and high vulnerability to droughts"], "#7e3739", ["high vulnerability to floods and droughts"], "#61293f", "#000000"] }, 'vulnerability');
+    addTileLayerToMap(map, 'arboverse.rivers', 'mapbox://arboverse.rivers', 'line', { 'line-color': "#81e7ff", 'line-width': ["interpolate", ["linear"], ["zoom"], 0, 1, 22, 2] }, 'rivers');
+    addTileLayerToMap(map, 'arboverse.icesheets', 'mapbox://arboverse.icesheets', 'fill', { 'fill-color': "#505f9e" }, 'icesheets');
+    addTileLayerToMap(map, 'arboverse.waterbodies', 'mapbox://arboverse.waterbodies', 'fill', { 'fill-color': "#669ed2" }, 'waterbodies');
     //aridity
     addRasterTileLayerToMap(map, 'arboverse.aridity_index_5km_modificado', 'mapbox://arboverse.aridity_index_5km_modificado', 'raster', 'mapbox://arboverse.aridity_index_5km_modificado', 0, 19);
     //population density
@@ -465,7 +478,7 @@ map.on('load', async () => {
     addRasterTileLayerToMap(map, 'arboverse.bio_mammals_cetartiodactyla', 'mapbox://arboverse.bio_mammals_cetartiodactyla', 'raster', 'mapbox://arboverse.bio_mammals_cetartiodactyla', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.bio_mammals_chiroptera_10km', 'mapbox://arboverse.bio_mammals_chiroptera_10km', 'raster', 'mapbox://arboverse.bio_mammals_chiroptera_10km', 0, 19);
     // Tree cover loss by dominat drivers
-    addTileLayerToMap(map, 'arboverse.drivers', 'mapbox://arboverse.drivers', 'fill', {'fill-color': ['match', ['get', 'classes'], [1], "#ea8d6b", [2], "#c36660", [3], "#89606e", [4], "#5d5d79", [5], "#1e4368", "#000000"]}, 'drivers');
+    addTileLayerToMap(map, 'arboverse.drivers', 'mapbox://arboverse.drivers', 'fill', { 'fill-color': ['match', ['get', 'classes'], [1], "#ea8d6b", [2], "#c36660", [3], "#89606e", [4], "#5d5d79", [5], "#1e4368", "#000000"] }, 'drivers');
     //forest landscape integrity index
     addRasterTileLayerToMap(map, 'arboverse.flii_oceania_5km', 'mapbox://arboverse.flii_oceania_5km', 'raster', 'mapbox://arboverse.flii_oceania_5km', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.flii_africa_5km', 'mapbox://arboverse.flii_africa_5km', 'raster', 'mapbox://arboverse.flii_africa_5km', 0, 19);
@@ -480,49 +493,39 @@ map.on('load', async () => {
     addRasterTileLayerToMap(map, 'arboverse.height_2019_nasia_1m', 'mapbox://arboverse.height_2019_nasia_1m', 'raster', 'mapbox://arboverse.height_2019_nasia_1m', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.height_2019_sasia_1km', 'mapbox://arboverse.height_2019_sasia_1km', 'raster', 'mapbox://arboverse.height_2019_sasia_1km', 0, 19);
     //intact forest landscape 2000 2013 2016
-    addTileLayerToMap(map, 'arboverse.ifl_2000', 'mapbox://arboverse.ifl_2000', 'fill', {'fill-color': "#00404d"}, 'ifl_2000');
-    addTileLayerToMap(map, 'arboverse.ifl_2013', 'mapbox://arboverse.ifl_2013', 'fill', {'fill-color': "#3a652a"}, 'ifl_2013');
-    addTileLayerToMap(map, 'arboverse.ifl_2016', 'mapbox://arboverse.ifl_2016', 'fill', {'fill-color': "#969206"}, 'ifl_2016');
+    addTileLayerToMap(map, 'arboverse.ifl_2000', 'mapbox://arboverse.ifl_2000', 'fill', { 'fill-color': "#00404d" }, 'ifl_2000');
+    addTileLayerToMap(map, 'arboverse.ifl_2013', 'mapbox://arboverse.ifl_2013', 'fill', { 'fill-color': "#3a652a" }, 'ifl_2013');
+    addTileLayerToMap(map, 'arboverse.ifl_2016', 'mapbox://arboverse.ifl_2016', 'fill', { 'fill-color': "#969206" }, 'ifl_2016');
     //primary forest
     addRasterTileLayerToMap(map, 'arboverse.primary_africa_1km_2010', 'mapbox://arboverse.primary_africa_1km_2010', 'raster', 'mapbox://arboverse.primary_africa_1km_2010', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.primary_south_america_1km_2010', 'mapbox://arboverse.primary_south_america_1km_2010', 'raster', 'mapbox://arboverse.primary_south_america_1km_2010', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.primary_madagascar_1km_2010', 'mapbox://arboverse.primary_madagascar_1km_2010', 'raster', 'mapbox://arboverse.primary_madagascar_1km_2010', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.primary_asia_1km_2010', 'mapbox://arboverse.primary_asia_1km_2010', 'raster', 'mapbox://arboverse.primary_asia_1km_2010', 0, 19);
     //minig
-    addTileLayerToMap(map, 'arboverse.mining1', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'cameroon_mining');
-    addTileLayerToMap(map, 'arboverse.mining2', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'brazil_mining');
-    addTileLayerToMap(map, 'arboverse.mining3', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'canada_mining');
-    addTileLayerToMap(map, 'arboverse.mining4', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'colombia_mining');
-    addTileLayerToMap(map, 'arboverse.mining5', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'democratic_republic_mining');
-    addTileLayerToMap(map, 'arboverse.mining6', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'gabon_mining');
-    addTileLayerToMap(map, 'arboverse.mining7', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'licadho_mining');
-    addTileLayerToMap(map, 'arboverse.mining8', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'mexico_mining');
-    addTileLayerToMap(map, 'arboverse.mining9', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'preu_mining');
-    addTileLayerToMap(map, 'arboverse.mining10', 'mapbox://arboverse.mining', 'fill', {'fill-color': "#EB9A60"}, 'republic_congo_mining');
+    addTileLayerToMap(map, 'arboverse.mining1', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'cameroon_mining');
+    addTileLayerToMap(map, 'arboverse.mining2', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'brazil_mining');
+    addTileLayerToMap(map, 'arboverse.mining3', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'canada_mining');
+    addTileLayerToMap(map, 'arboverse.mining4', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'colombia_mining');
+    addTileLayerToMap(map, 'arboverse.mining5', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'democratic_republic_mining');
+    addTileLayerToMap(map, 'arboverse.mining6', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'gabon_mining');
+    addTileLayerToMap(map, 'arboverse.mining7', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'licadho_mining');
+    addTileLayerToMap(map, 'arboverse.mining8', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'mexico_mining');
+    addTileLayerToMap(map, 'arboverse.mining9', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'preu_mining');
+    addTileLayerToMap(map, 'arboverse.mining10', 'mapbox://arboverse.mining', 'fill', { 'fill-color': "#EB9A60" }, 'republic_congo_mining');
     //logging
-    addTileLayerToMap(map, 'arboverse.logging1', 'mapbox://arboverse.logging', 'fill', {'fill-color': "#08255B"}, 'sarawak_logging');
-    addTileLayerToMap(map, 'arboverse.logging2', 'mapbox://arboverse.logging', 'fill', {'fill-color': "#08255B"}, 'liberia_logging');
-    addTileLayerToMap(map, 'arboverse.logging3', 'mapbox://arboverse.logging', 'fill', {'fill-color': "#08255B"}, 'gabon_logging');
-    addTileLayerToMap(map, 'arboverse.logging4', 'mapbox://arboverse.logging', 'fill', {'fill-color': "#08255B"}, 'equatorial_guinea_logging');
-    addTileLayerToMap(map, 'arboverse.logging5', 'mapbox://arboverse.logging', 'fill', {'fill-color': "#08255B"}, 'democratic_republic_logging');
-    addTileLayerToMap(map, 'arboverse.logging6', 'mapbox://arboverse.logging', 'fill', {'fill-color': "#08255B"}, 'centra_africa_logging');
-    addTileLayerToMap(map, 'arboverse.logging7', 'mapbox://arboverse.logging', 'fill', {'fill-color': "#08255B"}, 'camerron_logging');
-    addTileLayerToMap(map, 'arboverse.logging8', 'mapbox://arboverse.canada_logging', 'fill', {'fill-color': "#08255B"}, 'canada_logging_nova');
+    addTileLayerToMap(map, 'arboverse.logging1', 'mapbox://arboverse.logging', 'fill', { 'fill-color': "#08255B" }, 'sarawak_logging');
+    addTileLayerToMap(map, 'arboverse.logging2', 'mapbox://arboverse.logging', 'fill', { 'fill-color': "#08255B" }, 'liberia_logging');
+    addTileLayerToMap(map, 'arboverse.logging3', 'mapbox://arboverse.logging', 'fill', { 'fill-color': "#08255B" }, 'gabon_logging');
+    addTileLayerToMap(map, 'arboverse.logging4', 'mapbox://arboverse.logging', 'fill', { 'fill-color': "#08255B" }, 'equatorial_guinea_logging');
+    addTileLayerToMap(map, 'arboverse.logging5', 'mapbox://arboverse.logging', 'fill', { 'fill-color': "#08255B" }, 'democratic_republic_logging');
+    addTileLayerToMap(map, 'arboverse.logging6', 'mapbox://arboverse.logging', 'fill', { 'fill-color': "#08255B" }, 'centra_africa_logging');
+    addTileLayerToMap(map, 'arboverse.logging7', 'mapbox://arboverse.logging', 'fill', { 'fill-color': "#08255B" }, 'camerron_logging');
+    addTileLayerToMap(map, 'arboverse.logging8', 'mapbox://arboverse.canada_logging', 'fill', { 'fill-color': "#08255B" }, 'canada_logging_nova');
     //Over 38k dams
-    addTileLayerToMap(map, 'arboverse.dams', 'mapbox://arboverse.dams', 'circle', {
-        'circle-radius': ["interpolate", ["linear"], ["zoom"], 0, 2, 22, 9],
-        'circle-color': "#c2618a",
-        'circle-stroke-color': "#bd548e",
-        'circle-stroke-width': 0.5
-    }, 'dams');
+    addTileLayerToMap(map, 'arboverse.dams', 'mapbox://arboverse.dams', 'circle', { 'circle-radius': ["interpolate", ["linear"], ["zoom"], 0, 2, 22, 9], 'circle-color': "#c2618a", 'circle-stroke-color': "#bd548e", 'circle-stroke-width': 0.5 }, 'dams');
     //vector resistance inseticide
-    addTileLayerToMap(map, 'arboverse.resistance', 'mapbox://arboverse.resistance', 'circle', {
-        'circle-radius': ["interpolate", ["linear"], ["zoom"], 0, 3, 22, 15],
-        'circle-color': ["match", ["get", "Insecticide class"], ["Carbamates"], "#829d8a", ["Pyrethroids"], "#234a8c", ["Organochlorines"], "#5f8598", ["Organophosphates"], "#f2f2d0", "#000000"]
-    }, 'resistance');
-});
-
-
+    addTileLayerToMap(map, 'arboverse.resistance', 'mapbox://arboverse.resistance', 'circle', { 'circle-radius': ["interpolate", ["linear"], ["zoom"], 0, 3, 22, 15], 'circle-color': ["match", ["get", "Insecticide class"], ["Carbamates"], "#829d8a", ["Pyrethroids"], "#234a8c", ["Organochlorines"], "#5f8598", ["Organophosphates"], "#f2f2d0", "#000000"] }, 'resistance');
+})
 //Number of passengers
 map.on('load', function () {
     //Filter by year
@@ -2137,7 +2140,43 @@ var popup = new mapboxgl.Popup({
 var filterEl = document.getElementById('vector_dist');
 var listingEl = document.getElementById('feature-listing');
 
-/*//Render List in specific location Ok
+    /**
+     * A helper function to combine filters and apply them to the map.
+     * This ensures that the vector type dropdown and the text search
+     * can work together.
+     */
+    function applyFilters() {
+        const vectorType = document.getElementById("vectortype").value;
+        const searchText = normalize(filterEl.value);
+
+        // 1. Create the base filter from the dropdown selection.
+        const typeFilter = ["==", ["get", "type"], vectorType];
+
+        // 2. Create the filter from the text search input.
+        // We filter the `allVectors` array first in JavaScript, which is very fast.
+        const filteredByText = allVectors.filter(function (feature) {
+            const species = normalize(feature.properties.species);
+            return species.indexOf(searchText) > -1;
+        });
+
+        // Update the sidebar list with the text-filtered results.
+        renderListings(filteredByText);
+
+        // 3. Create a Mapbox filter expression from the text-filtered results.
+        const speciesFilter = [
+            'match',
+            ['get', 'species'],
+            filteredByText.map(feature => feature.properties.species),
+            true, // If a feature's species is in the list, show it.
+            false // Otherwise, hide it.
+        ];
+
+        // 4. Combine the filters and apply them to the map layer.
+        // The layer will only show features that match BOTH the type and the species search.
+        map.setFilter('arboverse.vector_distribution', ["all", typeFilter, speciesFilter]);
+    }
+
+//Render List in specific location Ok
 function renderListings(features) {
     var empty = document.createElement('p');
     //clear any existing listings
@@ -2153,61 +2192,31 @@ function renderListings(features) {
                     .setText(feature.properties.species)
                     .addTo(map);
             });
-            listingEl.appendChild(item);
-        });
-    } else if (features.length === 0 && filterEl.value !== '') {
-        empty.textContent = 'No results found';
-        listingEl.appendChild(empty)
-    } else {
-        empty.textContent = 'Zoom desired area to populate results';
-        listingEl.appendChild(empty);
-        // remove features filter
-        map.setFilter('arboverse.vector_distribution', ['has', 'species']);
-    }
-}*/
-
-function renderListings(features) {
-    var empty = document.createElement('p');
-    // Clear any existing listings
-    listingEl.innerHTML = '';
-    if (features.length) {
-        features.forEach(function (feature) {
-            var item = document.createElement('a');
-            item.textContent = feature.properties.species;
-
-            // Hover shows popup
-            item.addEventListener('mouseover', function () {
-                popup
-                    .setLngLat(feature.geometry.coordinates)
-                    .setText(feature.properties.species)
-                    .addTo(map);
-            });
-
             // Click centers map on feature
             item.addEventListener('click', function () {
                 map.flyTo({
                     center: feature.geometry.coordinates,
-                    zoom: 3, // adjust zoom level as needed
+                    zoom: 4, // adjust zoom level as needed
                     speed: 1.2, // optional
                     curve: 1,   // optional
                     essential: true
                 });
+                document.getElementById('vector_dist').value = feature.properties.species;
+                applyFilters();
             });
-
             listingEl.appendChild(item);
         });
+
     } else if (features.length === 0 && filterEl.value !== '') {
         empty.textContent = 'No results found';
-        listingEl.appendChild(empty);
+        listingEl.appendChild(empty)
     } else {
-        empty.textContent = 'Zoom desired area to populate results';
+        empty.textContent = 'Enable the layer to begin searching species.';
         listingEl.appendChild(empty);
         // remove features filter
         map.setFilter('arboverse.vector_distribution', ['has', 'species']);
     }
 }
-
-
 function normalize(string) {
     return string.trim().toLowerCase();
 }
@@ -2229,102 +2238,108 @@ function getUniqueFeatures(features, comparatorProperty) {
     }
     return uniqueFeatures;
 }
-
 //VECTOR DISTRIBUTION
+// VECTOR DISTRIBUTION - REFACTORED
+
+// This variable will hold all the unique vector features once loaded.
+// It acts as the master dataset for our search functionality.
+let allVectors = [];
+
 map.on('load', function () {
-    var vectorFilter = ["==", ["string", ["get", "type"]], "mosquito"];
+    // Add the vector tile source for vector distribution.
     map.addSource('arboverse.vector_distribution', {
         'type': 'vector',
         'url': 'mapbox://arboverse.vector_distribution'
     });
+
+    /**
+     * This function runs when the source data is loaded.
+     * It queries ALL features from the source, not just the ones in view.
+     */
+    function onSourceDataLoaded(e) {
+        // Ensure the event is for our source and it has fully loaded.
+        if (e.sourceId === 'arboverse.vector_distribution' && e.isSourceLoaded) {
+            // Query all features from the source layer.
+            const allFeatures = map.querySourceFeatures('arboverse.vector_distribution', {
+                sourceLayer: 'vector_distribution'
+            });
+
+            if (allFeatures.length) {
+                // Get the unique features and store them in our master variable.
+                allVectors = getUniqueFeatures(allFeatures, 'species');
+
+                // Initially populate the sidebar with all available vectors.
+                renderListings(allVectors);
+
+                // We have our data, so we can remove this event listener to prevent it from running again.
+                map.off('sourcedata', onSourceDataLoaded);
+            }
+        }
+    }
+
+    // Listen for the 'sourcedata' event to know when we can query the features.
+    map.on('sourcedata', onSourceDataLoaded);
+
+    // Add the map layer.
     map.addLayer({
         'id': 'arboverse.vector_distribution',
         'source': 'arboverse.vector_distribution',
         'source-layer': 'vector_distribution',
         'type': 'circle',
-        'paint': { 'circle-radius': ["interpolate", ["linear"], ["zoom"], 0, 4, 22, 8], 'circle-color': ["match", ["get", "type"], ["mosquito"], "#0b4578", ["sandfly"], "#65ab6c", ["midge"], "#408a80", ["tick"], "#28728f", ["other"], "#bbdb88", "#000000"] },
-        'filter': ["all", vectorFilter]
+        'paint': {
+            'circle-radius': ["interpolate", ["linear"], ["zoom"], 0, 4, 22, 8],
+            'circle-color': ["match", ["get", "type"],
+                ["mosquito"], "#0b4578",
+                ["sandfly"], "#65ab6c",
+                ["midge"], "#408a80",
+                ["tick"], "#28728f",
+                ["other"], "#bbdb88",
+                "#000000"
+            ]
+        },
+        // Set an initial filter based on the dropdown's default value.
+        'filter': ["==", ["string", ["get", "type"]], "mosquito"]
     });
+
+    // Hide the layer by default as in your original code.
     map.setLayoutProperty(
         'arboverse.vector_distribution',
         'visibility',
         'none'
     );
-    //Select option Vector type
-    const vectorType = document.getElementById("vectortype")
-    vectorType.addEventListener('change', function () {
-        console.log(vectorType.value)
-        var vecType = vectorType.value
-        vectorFilter = ["==", ["string", ["get", "type"]], vecType]
-        map.setFilter('arboverse.vector_distribution', ["all", vectorFilter])
-    });
 
-    //Select the vectors which are rendered on the map
-    map.on('movestart', function () {
-        // reset features filter as the map starts moving
-        map.setFilter('arboverse.vector_distribution', ['has', 'species']);// applied to species and type
-    });
-    map.on('moveend', function () {
-        var features = map.queryRenderedFeatures({ layers: ['arboverse.vector_distribution'] });
-        if (features) {
-            var uniqueFeatures = getUniqueFeatures(features, 'species');
-            // Populate features for the listing overlay.
-            renderListings(uniqueFeatures);
-            // Clear the input container
-            filterEl.value = '';
+    // --- EVENT LISTENERS ---
 
-            // Store the current features in sn `airports` variable to
-            // later use for filtering on `keyup`.
-            vectors = uniqueFeatures;
-        }
-    });
-    //Popup
+    // When the user changes the vector type in the dropdown, re-apply the filters.
+    document.getElementById("vectortype").addEventListener('change', applyFilters);
+
+    // When the user types in the search box, re-apply the filters.
+    filterEl.addEventListener('keyup', applyFilters);
+
+    // NOTE: The 'movestart' and 'moveend' listeners have been removed
+    // as they are no longer needed for filtering, which solves the original issue.
+
+    // --- POPUP LOGIC (Unchanged) ---
     map.on('mousemove', 'arboverse.vector_distribution', function (e) {
-        // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = 'pointer';
-
-        // Populate the popup and set its coordinates based on the feature.
-        var feature = e.features[0];
+        const feature = e.features[0];
         popup
             .setLngLat(feature.geometry.coordinates)
             .setText('Species: ' + feature.properties.species + ' | Order: ' + feature.properties.order + ' | Family: ' + feature.properties.family + ' | Year: ' + feature.properties.year)
             .addTo(map);
-        var popupElem = popup.getElement();
+        const popupElem = popup.getElement();
         popupElem.style.fontSize = "14px";
     });
+
     map.on('mouseleave', 'arboverse.vector_distribution', function () {
         map.getCanvas().style.cursor = '';
         popup.remove();
     });
-    //Filter by the search box
-    filterEl.addEventListener('keyup', function (e) {
-        //normalize the letters
-        var value = normalize(e.target.value);
 
-        // Filter visible features that don't match the input value.
-        var filtered = vectors.filter(function (feature) {
-            var species = normalize(feature.properties.species);
-            return species.indexOf(value) > -1;
-        });
-        //populate the side bar with filtered results
-        renderListings(filtered);
-
-        //set the filter to populate features into the layer
-        if (filtered.length) {
-            map.setFilter('arboverse.vector_distribution', [
-                'match',
-                ['get', 'species'],
-                filtered.map(function (feature) {
-                    return feature.properties.species;
-                }),
-                true,
-                false
-            ]);
-        }
-
-    });
+    // Initial call to populate the list.
     renderListings([]);
-})
+});
+
 //VIRUS DISCOVERY
 // holds visible families features for filtering
 let virusFamily = [];
@@ -2344,7 +2359,6 @@ const listingGenus = document.getElementById('genus-listing');
 
 const filterSpecies = document.getElementById('species-discovery-search');
 const listingSpecies = document.getElementById('species-listing');
-
 //Render the list of families in the listing box
 function renderListFamily(features) {
     const empty = document.createElement('p');
@@ -2375,7 +2389,6 @@ function renderListFamily(features) {
         map.setFilter('arboverse.6qvctboh', ['has', 'family'])
     }
 }
-
 //Render the list of genus in the listing box
 function renderListGenus(features) {
     const empty = document.createElement('p');
@@ -2406,175 +2419,6 @@ function renderListGenus(features) {
         map.setFilter('arboverse.6qvctboh', ['has', 'genus'])
     }
 }
-
-//Render the list of Species in the listing box
-function renderListSpecies(features) {
-    const empty = document.createElement('p');
-    // clear existing linst
-    listingSpecies.innerHTML = '';
-    if (features.length) {
-        for (const feature of features) {
-            const itemLink = document.createElement('a');
-            itemLink.textContent = feature.properties.species;
-            itemLink.addEventListener('mouseover', () => {
-                // highlight the corresponding feature on the map
-                popupDiscovery
-                    .setLngLat(feature.geometry.coordinates)
-                    .setText(feature.properties.species)
-                    .addTo(map);
-            });
-            listingSpecies.appendChild(itemLink);
-        }
-
-    } else if (features.length === 0 && filterSpecies.value !== '') {
-        empty.textContent = 'No results found';
-        listingSpecies.appendChild(empty);
-    } else {
-        empty.textContent = 'Drag the map to populate results';
-        listingSpecies.appendChild(empty);
-
-        //remove features filter
-        map.setFilter('arboverse.6qvctboh', ['has', 'species'])
-    }
-}
-map.on('load', function () {
-
-    map.addSource('arboverse.6qvctboh', {
-        'type': 'vector',
-        'url': 'mapbox://arboverse.6qvctboh'
-    })
-    map.addLayer({
-        'id': 'arboverse.6qvctboh',
-        'source': 'arboverse.6qvctboh',
-        'source-layer': 'virus_discovery-5quy5w',
-        'type': 'circle',
-        'paint': {
-            'circle-radius': ["interpolate", ["linear"], ["zoom"], 0, 7, 22, 11],
-            'circle-color': ["match", ["get", "family"], ["Nodaviridae"], "#a46267", ["Reoviridae"], "#e99a73", ["Orthomyxoviridae"], "#e57b62", ["Peribunyaviridae"], "#6b5f76", ["Togaviridae"], "#2a4b70", ["Phenuiviridae"], "#85606f", ["Nairoviridae"], "#515b7a", ["Nyamiviridae"], "#c8675f", ["Flaviviridae"], "#0c2e4d", ["Asfarviridae"], "#031326", ["Rhabdoviridae"], "#0f574e", ["unk"], "#e5b589", "#000000"],
-        }
-    })
-    map.setLayoutProperty(
-        'arboverse.6qvctboh',
-        'visibility',
-        'none'
-    );
-    map.on('movestart', () => {
-        // reset features filter as the map starts moving
-        map.setFilter('arboverse.6qvctboh', ['has', 'family']);
-    });
-    map.on('moveend', () => {
-        const features = map.queryRenderedFeatures({ layers: ['arboverse.6qvctboh'] });
-
-        if (features) {
-            const uniqueFeaturesFamily = getUniqueFeatures(features, 'family');
-            renderListFamily(uniqueFeaturesFamily)
-            //clear the input container for family
-            filterFamily.value = '';
-
-            families = uniqueFeaturesFamily;
-
-            const uniqueFeaturesGenus = getUniqueFeatures(features, 'genus');
-            renderListGenus(uniqueFeaturesGenus)
-            //clear the input container for genus
-            filterGenus.value = '';
-
-            genuses = uniqueFeaturesGenus;
-
-            const uniqueFeaturesSpeciesDiscovery = getUniqueFeatures(features, 'species');
-            renderListSpecies(uniqueFeaturesSpeciesDiscovery)
-            //clear the input container for species
-            filterSpecies.value = '';
-
-            speciesDiscovery = uniqueFeaturesSpeciesDiscovery;
-        }
-    });
-    map.on('mousemove', 'arboverse.6qvctboh', (e) => {
-        map.getCanvas().style.cursor = 'pointer';
-
-        const feature = e.features[0];
-        //Popup when hover on virus discovery
-        popupDiscovery
-            .setLngLat(feature.geometry.coordinates)
-            .setText(
-                `${feature.properties.virus_name} was discovered in ${feature.properties.collection_year}  in ${feature.properties.country}. It belogs to ${feature.properties.family} family, ${feature.properties.genus} genus and ${feature.properties.species} species.`
-            )
-            .addTo(map);
-    });
-    map.on('mouseleave', 'arboverse.6qvctboh', () => {
-        map.getCanvas().style.cursor = '';
-        popupDiscovery.remove();
-    });
-    filterFamily.addEventListener('keyup', (e) => {
-        const value = normalize(e.target.value);
-
-        const filteredFamily = families.filter(function (feature) {
-            var family = normalize(feature.properties.family);
-            return family.indexOf(value) > -1;
-
-        })
-
-        //populate the side bar with filtered results
-        renderListFamily(filteredFamily);
-        //set the filter to populate features into the layer
-        if (filteredFamily.length) {
-            map.setFilter('arboverse.6qvctboh', [
-                'match',
-                ['get', 'family'],
-                filteredFamily.map((feature) => {
-                    return feature.properties.family;
-                }),
-                true,
-                false
-            ]);
-        }
-    });
-    filterGenus.addEventListener('keyup', (e) => {
-        const value = normalize(e.target.value);
-
-        const filteredGenus = genuses.filter(function (feature) {
-            var genus = normalize(feature.properties.genus);
-            return genus.indexOf(value) > -1;
-        })
-
-        renderListGenus(filteredGenus);
-        if (filteredGenus.length) {
-            map.setFilter('arboverse.6qvctboh', [
-                'match',
-                ['get', 'genus'],
-                filteredGenus.map((feature) => {
-                    return feature.properties.genus;
-                }),
-                true,
-                false
-            ]);
-        }
-    });
-
-    filterSpecies.addEventListener('keyup', (e) => {
-        const value = normalize(e.target.value);
-
-        const filteredSpeciesDiscovery = speciesDiscovery.filter(function (feature) {
-            var specieDiscover = normalize(feature.properties.species);
-            return specieDiscover.indexOf(value) > -1;
-        })
-
-        renderListSpecies(filteredSpeciesDiscovery);
-        if (filteredSpeciesDiscovery.length) {
-            map.setFilter('arboverse.6qvctboh', [
-                'match',
-                ['get', 'species'],
-                filteredSpeciesDiscovery.map((feature) => {
-                    return feature.properties.species;
-                }),
-                true,
-                false
-            ]);
-        }
-    })
-    renderListFamily([]);
-    renderListGenus([]);
-    renderListSpecies([]);
-})
 
 //VECTOR Resistance POPUp
 map.on('load', function () {
@@ -2629,6 +2473,10 @@ map.on('load', function () {
         'maxzoom': 10
     });
 
+    const searchInput = document.getElementById('species-distribution-search');
+    const suggestionsEl = document.getElementById('species-suggestions');
+    const searchBtn = document.getElementById('search-distribution-btn');
+
     // Function to extract unique virus names from the map layer
     let viruses = [];
     function fetchVirusNames() {
@@ -2681,37 +2529,47 @@ map.on('load', function () {
         map.setFilter('arboverse.virusdiscovery', newFilter);
     }
 
-    function showSuggestions(inputElement, data, autocompleteBox) {
-      const normalizedValue = normalize(inputElement.value);
+    function showSuggestions(value) {
+        const normalizedValue = normalize(value);
+        const matches = viruses.filter(v =>
+            normalize(v).includes(normalizedValue)
+        );
 
-      const matches = data
-        .filter(v => normalize(v).includes(normalizedValue))
-        //.slice(0, 3); // Limit to top 3
-
-      autocompleteBox.innerHTML = '';
-
-      matches.forEach(match => {
-        const div = document.createElement('div');
-        div.textContent = match;
-        div.className = 'autocomplete-item';
-
-        div.onclick = () => {
-          inputElement.value = match;
-          autocompleteBox.innerHTML = '';
-          //autocompleteBox.classList.add('hidden');
-          applyFilter();
-        };
-
-        autocompleteBox.appendChild(div);
-      });
+        suggestionsEl.innerHTML = '';
+        if (matches.length > 0) {
+            matches.forEach(match => {
+                const li = document.createElement('li');
+                li.textContent = match;
+                li.addEventListener('click', () => {
+                    searchInput.value = match;
+                    suggestionsEl.style.display = 'none';
+                    applyFilter();
+                });
+                suggestionsEl.appendChild(li);
+            });
+            suggestionsEl.style.display = 'block';
+        } else {
+            suggestionsEl.style.display = 'none';
+        }
     }
 
     searchInput.addEventListener('input', function (e) {
         const value = e.target.value;
-        showSuggestions(searchInput, viruses, suggestionsEl);
+        if (value.trim() !== '') {
+            showSuggestions(value);
+        } else {
+            suggestionsEl.style.display = 'none';
+        }
     });
 
     searchBtn.addEventListener('click', applyFilter);
+
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            applyFilter();
+            suggestionsEl.style.display = 'none';
+        }
+    });
 
     // Re-fetch viruses whenever the map data changes (e.g., when zooming or panning)
     map.on('sourcedata', function (e) {
@@ -2723,31 +2581,3 @@ map.on('load', function () {
     renderListings([]);
 });
 
-//map visibility checked
-function update_map(cb) {
-    var clickedLayers = cb.id
-    clickedLayersList = clickedLayers.split(',')
-    console.log(clickedLayersList)
-    if (cb.checked) {
-        for (let i = 0; i < clickedLayersList.length; i++) {
-            clickedLayer = clickedLayersList[i];
-            map.setLayoutProperty(
-                clickedLayer,
-                'visibility',
-                'visible'
-            );
-        }
-
-    } else {
-        for (let i = 0; i < clickedLayersList.length; i++) {
-            clickedLayer = clickedLayersList[i];
-            map.setLayoutProperty(
-                clickedLayer,
-                'visibility',
-                'none'
-            );
-        }
-    }
-
-    console.log(cb.checked);
-}
