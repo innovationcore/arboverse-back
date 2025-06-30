@@ -2579,5 +2579,18 @@ map.on('load', function () {
     });
 
     renderListings([]);
+
+    // add in a scale in both measurement systems
+    const imperial = new mapboxgl.ScaleControl({
+        maxWidth: 80, // The maximum width of the scale control in pixels.
+        unit: 'imperial' // Use 'metric' for kilometers or 'imperial' for miles.
+    });
+    const metric = new mapboxgl.ScaleControl({
+        maxWidth: 80, // The maximum width of the scale control in pixels.
+        unit: 'metric' // Use 'metric' for kilometers or 'imperial' for miles.
+    });
+    map.addControl(imperial, 'bottom-right');
+    map.addControl(metric, 'bottom-right');
 });
+
 
