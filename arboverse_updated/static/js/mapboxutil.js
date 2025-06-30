@@ -2654,7 +2654,7 @@ map.on('load', function () {
         div.onclick = () => {
           inputElement.value = match;
           autocompleteBox.innerHTML = '';
-          autocompleteBox.classList.add('hidden');
+          //autocompleteBox.classList.add('hidden');
           applyFilter();
         };
 
@@ -2664,21 +2664,10 @@ map.on('load', function () {
 
     searchInput.addEventListener('input', function (e) {
         const value = e.target.value;
-        if (value.trim() !== '') {
-            showSuggestions(searchInput, viruses, suggestionsEl);
-        } else {
-            suggestionsEl.style.display = 'none';
-        }
+        showSuggestions(searchInput, viruses, suggestionsEl);
     });
 
     searchBtn.addEventListener('click', applyFilter);
-
-    searchInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-            applyFilter();
-            suggestionsEl.style.display = 'none';
-        }
-    });
 
     // Re-fetch viruses whenever the map data changes (e.g., when zooming or panning)
     map.on('sourcedata', function (e) {

@@ -92,7 +92,7 @@
           <div class="search" id="autocomplete-container">
             <input class="search-virus" type="texts" placeholder="Search arbovirus..." id="arbovirus-search">
             <button id="arbovirus-submit" class="searchbutton" type="submit" onclick="searchVirusDB('arbovirus-search')"><i class="fa fa-search"></i></button>
-            <div id="arbo-autocomplete" class="autocomplete-box hidden"></div>
+            <div id="arbo-autocomplete" class="autocomplete-box"></div>
           </div>
           <div class="tabs">
             <div class="tab">
@@ -789,7 +789,7 @@
         </div>
         <div class="search_sub">
           <h6>Find location by species</h6>
-          <input id="vector_dist" class="search-distribution" type="text"placeholder="Search by species...">
+          <input id="vector_dist" class="search-distribution" type="text" placeholder="Search by species...">
         </div>
         <div id="feature-listing" class="listing vector_listing"></div>
       </div>
@@ -5910,6 +5910,12 @@
     showSuggestions(this, filteredSuggestions, vectorAutocomplete);
   });
 
+/*  // Event listeners for vector search
+  vector_dist.addEventListener('input', function() {
+    const filteredSuggestions = filterSuggestions(this.value, search_vectors);
+    showSuggestions(this, filteredSuggestions, vectorAutocomplete);
+  });*/
+
   // Close suggestions when clicking outside
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.search')) {
@@ -6049,8 +6055,8 @@
 
         const data = full_data['virus'][0];
         let virusvector = full_data['virus_vector'];
-        console.log(data);
-        console.log(virusvector);
+        //console.log(data);
+        //console.log(virusvector);
 
         // Taxonomy and Genomics
         document.getElementById('virus_name').innerHTML = data.name;
@@ -6086,7 +6092,7 @@
               vv_names.push(virusvector[i].vector.name);
             }
           }
-          console.log(vv_names);
+          //console.log(vv_names);
           document.getElementById('virus_vector_binominal').innerHTML = vv_names.join(" | ");
         }
         document.getElementById('virus_host').innerHTML = data.host_amplifier;
