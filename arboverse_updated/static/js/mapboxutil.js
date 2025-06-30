@@ -2211,7 +2211,7 @@ function renderListings(features) {
         empty.textContent = 'No results found';
         listingEl.appendChild(empty)
     } else {
-        empty.textContent = 'Zoom desired area to populate results';
+        empty.textContent = 'Enable the layer to begin searching species.';
         listingEl.appendChild(empty);
         // remove features filter
         map.setFilter('arboverse.vector_distribution', ['has', 'species']);
