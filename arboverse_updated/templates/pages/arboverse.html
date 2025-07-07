@@ -6014,7 +6014,8 @@
           feeding_period = data.feeding_period[0].name;
         }
         document.getElementById('vector_feed').innerHTML = feeding_period;
-        document.getElementById('vector_anthro').innerHTML = data.anthropophilic_behavior;
+        console.log(data);
+        document.getElementById('vector_anthro').innerHTML = data.anthropophilic_behaviour;
         document.getElementById('vector_eggs').innerHTML = data.eggs_viability_days;
         document.getElementById('vector_life').innerHTML = data.adult_life_expectancy_days;
 
