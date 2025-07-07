@@ -16,7 +16,14 @@ from arboverse_updated.models import BloodMeal, \
                                      Virus, \
                                      VirusFamily, \
                                      VirusGenus, \
-                                     VirusVector
+                                     VirusVector, \
+    VectorSpeciesBloodMeal, \
+    VectorSpeciesHabitat, \
+    VectorSpeciesLocation, \
+    VectorSpeciesLandscape, \
+    VectorSpeciesFeedingPeriod
+
+from schema_populator import VectorBloodmeal, VectorFeedingPeriod
 
 # Register your models here.
 
@@ -32,9 +39,13 @@ admin.site.register(VectorFamily)
 admin.site.register(VectorGenus)
 admin.site.register(VectorOrder)
 admin.site.register(VectorSpecies)
+admin.site.register(VectorSpeciesHabitat)
+admin.site.register(VectorSpeciesLocation)
+admin.site.register(VectorSpeciesLandscape)
+admin.site.register(VectorSpeciesBloodMeal)
+admin.site.register(VectorSpeciesFeedingPeriod)
 admin.site.register(VectorSubFamily)
 admin.site.register(Virus)
 admin.site.register(VirusFamily)
 admin.site.register(VirusGenus)
 admin.site.register(VirusVector)
-
