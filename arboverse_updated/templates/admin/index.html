@@ -1,0 +1,16 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+  <div class="custom-button-container" style="margin-top: 2rem; margin-bottom: 2rem;">
+    <a href="{% url 'download_all_data' %}" class="button" style="
+      display: inline-block;
+      background: #0C4B33;
+      color: white;
+      padding: 0.5em 1em;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    ">⬇ Download All Virus-Vector Data (CSV)</a>
+  </div>
+{{ block.super }}
+{% endblock %}

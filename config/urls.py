@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.contrib.admin import AdminSite
+from django.template.response import TemplateResponse
 from django.urls import include, path
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -6,12 +8,14 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from rest_framework.routers import DefaultRouter
 from arboverse_updated import views
+from arboverse_updated.admin import download_all_data, download_virus_vector_data
 
 router = DefaultRouter()
 router.register('virus', views.VirusViewSet, basename="Virus")
 router.register('virus-vector', views.VectorViewSet, basename="VirusVector")
 router.register('vector-species', views.VectorSpeciesSet, basename="VectorSpecies")
 #router.register('vector-search', views.get_vector_by_name, basename="VectorSpeciesSearch")
+
 
 urlpatterns = ([
     path(
@@ -60,7 +64,8 @@ urlpatterns = ([
     path("api/", include(router.urls)),
     path('api/vector-by-name/', views.get_vector_by_name, name='get-vector-by-name'),
     path('api/virus-by-name/', views.get_virus_by_name, name='get-virus-by-name'),
-    path('api/virusvector-by-virus/', views.get_virusvector_by_virus, name='get-virusvector-by-virus')
+    path('api/virusvector-by-virus/', views.get_virusvector_by_virus, name='get-virusvector-by-virus'),
+    path('download-all-data/', download_all_data, name='download_all_data'),
     # Your stuff: custom urls included go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
                + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
