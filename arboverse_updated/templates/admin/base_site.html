@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+  <nav id="nav-sidebar">
+    <ul class="custom-app-list">
+      {% for group, models in grouped_models.items %}
+        <li class="app-group">
+          <strong>{{ group }}</strong>
+          <ul>
+            {% for model in models %}
+              <li>
+                <a href="{{ model.admin_url }}">{{ model.name }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endblock %}

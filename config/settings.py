@@ -1,8 +1,13 @@
 import os
 from pathlib import Path
+
+from django.apps import apps
 from dotenv import load_dotenv
 
 import logging
+
+import arboverse_updated.apps
+
 logger = logging.getLogger(__name__)
 
 load_dotenv()
@@ -48,6 +53,8 @@ DATABASES = {
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']  # probably should not leave this enabled in production
 
 DJANGO_APPS = [
+    'admin_reorder',
+    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -55,7 +62,6 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    "django.contrib.admin",
     "django.forms",
     "rest_framework",
 ]
@@ -67,7 +73,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'arboverse_updated',  # my app
+    'arboverse_updated.apps.ArboverseUpdatedConfig',
     #"arboverse.users.apps.UsersConfig",
     #"arboverse.arbovirus.apps.ArbovirusConfig",
     # Your stuff: custom apps go here
@@ -107,6 +113,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 # STATIC
@@ -196,6 +203,10 @@ LOGGING = {
     "root": {"level": "DEBUG", "handlers": ["console"]},
 }
 
+
+# ADMIN PAGE ORGANIZATION
+# ------------------------------------------------------------------------------
+ADMIN_REORDER = []
 
 # logger.warn("config/settings.py read")
 # logger.warn(f"DEBUG=${DEBUG}")
