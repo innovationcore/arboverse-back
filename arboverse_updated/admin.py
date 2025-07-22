@@ -92,8 +92,6 @@ class GroupedAdminSite(admin.AdminSite):
                     "models": group_models,
                 })
 
-        print(ordered)
-
         return ordered if ordered else sorted(app_dict.values(), key=lambda x: x["name"].lower())
 
 

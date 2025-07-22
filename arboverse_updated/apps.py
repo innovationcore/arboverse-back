@@ -19,13 +19,9 @@ class ArboverseUpdatedConfig(AppConfig):
         users = []
         socialaccount = []
 
-        print(apps.get_models())
-
         for model in apps.get_models():
             model_label = f"{model._meta.app_label}.{model.__name__}"
             name_lower = model.__name__.lower()
-
-            print(model_label)
 
             if "vector" in name_lower:
                 vectors.append(model_label)
