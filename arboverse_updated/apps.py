@@ -6,11 +6,12 @@ class ArboverseUpdatedConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'arboverse_updated'
 
+
     def ready(self):
         from django.apps import apps
 
-        from django.contrib import admin
-        admin.site.index_template = 'admin/index.html'
+        from .admin import custom
+        custom.index_template = 'admin/index.html'
 
         vectors = []
         viruses = []
@@ -35,6 +36,8 @@ class ArboverseUpdatedConfig(AppConfig):
             elif model._meta.app_label == "account":
                 users.append(model_label)
             elif model._meta.app_label == "socialaccount":
+                socialaccount.append(model_label)
+            elif model._meta.app_label == "sites":
                 socialaccount.append(model_label)
             else:
                 others.append(model_label)
@@ -68,4 +71,3 @@ class ArboverseUpdatedConfig(AppConfig):
             }
         ]
 
-        print(settings.ADMIN_REORDER)

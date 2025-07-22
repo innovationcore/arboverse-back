@@ -1,9 +1,10 @@
 from django.conf import settings
+from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.template.response import TemplateResponse
 from django.urls import include, path
 from django.conf.urls.static import static
-from django.contrib import admin
+#from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from rest_framework.routers import DefaultRouter
@@ -54,7 +55,8 @@ urlpatterns = ([
         name="contact",
     ),
     # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
+    #path('admin/', admin.site.urls),
+    path('admin/', custom.urls),
     # User management
     path(
         "users/",
