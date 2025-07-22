@@ -1,3 +1,6 @@
+import io
+import zipfile
+
 from django.conf import settings
 from django.contrib import admin
 import csv
@@ -50,6 +53,7 @@ class GroupedAdminSite(admin.AdminSite):
 
 custom = GroupedAdminSite(name="admin")
 
+
 def download_all_data(request):
     app_label = 'arboverse_updated'  # your app name here
 
@@ -87,39 +91,27 @@ def download_all_data(request):
     return response
 
 
-def download_virus_vector_data(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="virus_vector_data.csv"'
 
-    writer = csv.writer(response)
+def download_all_csvs(request):
+    memory_file = io.BytesIO()
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for model in apps.get_models():
+            model_name = model._meta.label.replace('.', '_') + '.csv'
+            buffer = io.StringIO()
+            writer = csv.writer(buffer)
 
-    # Write header
-    writer.writerow([
-        "Virus Name",
-        "Virus Family",
-        "Virus Genus",
-        "Vector Species",
-        "Vector Genus",
-        "Vector Family",
-        "Main Vector",
-    ])
+            fields = [field.name for field in model._meta.fields]
+            writer.writerow(fields)
 
-    queryset = VirusVector.objects.select_related(
-        'virus', 'virus__virusfamily', 'virus__virusgenus',
-        'vector', 'vector__vectorgenus', 'vector__vectorfamily'
-    )
+            for obj in model.objects.all().values_list(*fields):
+                writer.writerow(obj)
 
-    for obj in queryset:
-        writer.writerow([
-            obj.virus.name if obj.virus else '',
-            obj.virus.virusfamily.name if obj.virus and obj.virus.virusfamily else '',
-            obj.virus.virusgenus.name if obj.virus and obj.virus.virusgenus else '',
-            obj.vector.name if obj.vector else '',
-            obj.vector.vectorgenus.name if obj.vector and obj.vector.vectorgenus else '',
-            obj.vector.vectorfamily.name if obj.vector and obj.vector.vectorfamily else '',
-            obj.main_vector,
-        ])
+            zip_file.writestr(model_name, buffer.getvalue())
+            buffer.close()
 
+    memory_file.seek(0)
+    response = HttpResponse(memory_file.getvalue(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=all_models.zip'
     return response
 
 
