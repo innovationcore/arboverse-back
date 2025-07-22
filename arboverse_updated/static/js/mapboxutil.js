@@ -196,6 +196,8 @@ function update_map_only_time(cb, year, prefix) {
     console.log(cb.checked);
 }
 map.on('load', async () => {
+
+
     //Annual temperature
     addRasterTileLayerToMap(map, 'arboverse.temp_min_rcp45_1985_2015', 'mapbox://arboverse.temp_min_rcp45_1985_2015', 'raster', 'mapbox://arboverse.temp_min_rcp45_1985_2015', 0, 19);
     addRasterTileLayerToMap(map, 'arboverse.temp_average_rcp45_1985_2015', 'mapbox://arboverse.temp_average_rcp45_1985_2015', 'raster', 'mapbox://arboverse.temp_average_rcp45_1985_2015', 0, 19);
@@ -2341,6 +2343,30 @@ map.on('load', function () {
 });
 
 //VIRUS DISCOVERY
+
+map.on('load', () => {
+    // 1. Add the source (replace 'username' with your Mapbox username)
+    map.addSource('arbovirus', {
+      type: 'vector',
+      url: 'mapbox://arboverse.bo7kkb4r'
+    });
+
+    // 2. Add a layer that references the source
+    map.addLayer({
+      id: 'arboverse.bo7kkb4r',
+      type: 'fill',
+      source: 'arbovirus',
+      'source-layer': 'taxonomic_distribution_2025-0-2qxsp7',
+      layout: {
+        visibility: 'none'  // Hide initially
+      },
+      paint: {
+        'fill-color': '#0080ff',
+        'fill-opacity': 0.5
+      }
+    });
+  });
+
 // holds visible families features for filtering
 let virusFamily = [];
 let virusGenus = [];
@@ -2359,6 +2385,48 @@ const listingGenus = document.getElementById('genus-listing');
 
 const filterSpecies = document.getElementById('species-discovery-search');
 const listingSpecies = document.getElementById('species-listing');
+
+filterFamily.addEventListener('input', (e) => {
+    const value = e.target.value.toLowerCase();
+
+    if (value) {
+        map.setFilter('arboverse.bo7kkb4r', [
+            'in',
+            value,
+            ['downcase', ['get', 'family']]
+        ]);
+    } else {
+        map.setFilter('arboverse.bo7kkb4r', ['has', 'family']);
+    }
+});
+
+filterGenus.addEventListener('input', (e) => {
+    const value = e.target.value.toLowerCase();
+    if (value) {
+        map.setFilter('arboverse.bo7kkb4r', [
+            'in',
+            value,
+            ['downcase', ['get', 'genus']]
+        ]);
+    } else {
+        map.setFilter('arboverse.bo7kkb4r', ['has', 'genus']);
+    }
+});
+
+filterSpecies.addEventListener('input', (e) => {
+    const value = e.target.value.toLowerCase();
+    if (value) {
+        map.setFilter('arboverse.bo7kkb4r', [
+            'in',
+            value,
+            ['downcase', ['get', 'species']]
+        ]);
+    } else {
+        map.setFilter('arboverse.bo7kkb4r', ['has', 'species']);
+    }
+});
+
+
 //Render the list of families in the listing box
 function renderListFamily(features) {
     const empty = document.createElement('p');
@@ -2386,7 +2454,7 @@ function renderListFamily(features) {
         listingFamily.appendChild(empty);
 
         //remove features filter
-        map.setFilter('arboverse.6qvctboh', ['has', 'family'])
+        map.setFilter('arboverse.bo7kkb4r', ['has', 'family'])
     }
 }
 //Render the list of genus in the listing box
@@ -2416,7 +2484,7 @@ function renderListGenus(features) {
         listingGenus.appendChild(empty);
 
         //remove features filter
-        map.setFilter('arboverse.6qvctboh', ['has', 'genus'])
+        map.setFilter('arboverse.bo7kkb4r', ['has', 'genus'])
     }
 }
 
