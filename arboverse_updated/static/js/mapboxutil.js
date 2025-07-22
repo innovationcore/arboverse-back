@@ -2474,7 +2474,7 @@ map.on('load', function () {
     });
 
     const searchInput = document.getElementById('species-distribution-search');
-    const suggestionsEl = document.getElementById('species-suggestions');
+    const suggestionsEl = document.getElementById('species-distribution-autocomplete');
     const searchBtn = document.getElementById('search-distribution-btn');
 
     // Function to extract unique virus names from the map layer
@@ -2538,18 +2538,18 @@ map.on('load', function () {
         suggestionsEl.innerHTML = '';
         if (matches.length > 0) {
             matches.forEach(match => {
-                const li = document.createElement('li');
+                const li = document.createElement('a');
                 li.textContent = match;
                 li.addEventListener('click', () => {
                     searchInput.value = match;
-                    suggestionsEl.style.display = 'none';
+                    //suggestionsEl.style.display = 'none';
                     applyFilter();
                 });
                 suggestionsEl.appendChild(li);
             });
-            suggestionsEl.style.display = 'block';
+            //suggestionsEl.style.display = 'block';
         } else {
-            suggestionsEl.style.display = 'none';
+            //suggestionsEl.style.display = 'none';
         }
     }
 
@@ -2558,7 +2558,7 @@ map.on('load', function () {
         if (value.trim() !== '') {
             showSuggestions(value);
         } else {
-            suggestionsEl.style.display = 'none';
+            //suggestionsEl.style.display = 'none';
         }
     });
 
@@ -2567,7 +2567,7 @@ map.on('load', function () {
     searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
             applyFilter();
-            suggestionsEl.style.display = 'none';
+            //suggestionsEl.style.display = 'none';
         }
     });
 

@@ -112,7 +112,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 # STATIC
