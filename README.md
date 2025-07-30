@@ -82,3 +82,6 @@ Each of these scripts have been added for a specific purpose.
 1. `mapbox_api_upload.py` - This script is used to upload the GeoJSON file to Mapbox and create a new layer. You will need to add your Mapbox API key to the .env file for this to work.
 2. `virus_geojson_builder.py` - This script is used to generate a GeoJSON file from a shapefile and excel document. You will need to add the path to the shapefile and the excel document to the file for this to work.
 3. `schema_populator.py` - This script is used to populate the database. The script is dependent on `The global distribution of arbovirus diversity - OFFICIAL.xlsx` and `Arbovector_database.csv` to populate. If you wish to use alternative files, their names will need to be changed in the script. The format of data cannot be changed from how it is presented in these two files or it will not work.
+
+
+## 

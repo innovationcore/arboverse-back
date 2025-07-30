@@ -90,7 +90,10 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
-ADMIN_URL = "admin/"
+ADMIN_URL = "/admin/"
+LOGIN_URL = "/admin/registration/"
+LOGIN_REDIRECT_URL = "/admin/"
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [("Noah Perry", "noah.perry@uky.edu"),
           ("Steve Roggenkamp","steve.roggenkamps@uky.edu")]

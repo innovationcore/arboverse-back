@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import admin
 import csv
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
 from arboverse_updated.models import *
@@ -30,14 +31,16 @@ class GroupedAdminSite(admin.AdminSite):
     site_title = "Arboverse Admin Portal"
     index_title = "Welcome to Arboverse DB"
 
-    def get_urls(self):
-        urls = super().get_urls()
-        custom_urls = [
-            path('<str:app_label>/', staff_member_required(self.app_index), name='app_list'),
-        ]
-        return custom_urls + urls
+    def has_permission(self, request):
+        """
+        Required to allow access to the admin site.
+        """
+        return request.user.is_active and request.user.is_staff
 
     def get_app_list(self, request, app_label=None):
+        """
+        Builds the grouped list of models for the admin index.
+        """
         app_dict = self._build_app_dict(request)
         admin_reorder = getattr(settings, "ADMIN_REORDER", [])
 
@@ -49,19 +52,17 @@ class GroupedAdminSite(admin.AdminSite):
             }
 
         for group in admin_reorder:
-            title = group.get("label", "")  # corrected key from 'title' to 'label'
+            title = group.get("label", "")
             model_paths = group.get("models", [])
 
             group_models = []
             for full_model_path in model_paths:
                 try:
                     app_label_part, model_name_part = full_model_path.split(".")
-
                     model = apps.get_model(app_label_part, model_name_part)
                     if model not in self._registry:
-                        continue  # skip unregistered models
+                        continue
 
-                    # Get verbose name, object name, and admin URL
                     model_admin = self._registry[model]
                     opts = model._meta
                     model_dict = {
@@ -71,60 +72,32 @@ class GroupedAdminSite(admin.AdminSite):
                         "perms": model_admin.get_model_perms(request),
                     }
 
-                    if model_dict["perms"].get("change", False):  # only show if user can change
+                    if model_dict["perms"].get("change", False):
                         group_models.append(model_dict)
-                except Exception as e:
-                    # Optional: print or log the error for debugging
+                except Exception:
                     continue
 
             if group_models:
-                first_model_url = group_models[0]["admin_url"]
                 first_model = group_models[0]
-                first_app_label = first_model['admin_url'].split('/')[2]  # crude but works, or better:
-
-                # or store real app_label from model meta when building model_dict
-                first_app_label = group_models[0].get('app_label', 'arboverse_updated')
+                first_app_label = first_model['admin_url'].split('/')[2]
 
                 ordered.append({
                     "name": title,
                     "app_label": first_app_label,
-                    "app_url": first_model_url,
+                    "app_url": first_model["admin_url"],
                     "models": group_models,
                 })
 
         return ordered if ordered else sorted(app_dict.values(), key=lambda x: x["name"].lower())
 
-
-    def each_context(self, request):
-        context = super().each_context(request)
-
-        # Build grouped_models from settings
-        grouped_models = {}
-        for section in getattr(settings, "ADMIN_REORDER", []):
-            label = section["label"]
-            models = section["models"]
-            grouped_models[label] = []
-
-            for model_path in models:
-                try:
-                    app_label, model_name = model_path.split(".")
-                    model = self._registry[apps.get_model(app_label, model_name)]
-                    info = model.model._meta.app_label, model.model._meta.model_name
-                    grouped_models[label].append({
-                        "name": model.model._meta.verbose_name_plural.title(),
-                        "admin_url": f"/admin/{info[0]}/{info[1]}/"
-                    })
-                except Exception:
-                    continue  # silently ignore if model is not registered
-
-        context["grouped_models"] = grouped_models
-        return context
-
-
     def index(self, request, extra_context=None):
+        """
+        Renders the main admin index page with the custom grouped app list.
+        The authentication check is handled automatically by the admin site's framework.
+        """
         context = {
             **self.each_context(request),
-            'app_list': self.get_app_list(request),  # 🔑 This is what renders models
+            'app_list': self.get_app_list(request),
             **(extra_context or {}),
         }
         return TemplateResponse(request, self.index_template, context)
